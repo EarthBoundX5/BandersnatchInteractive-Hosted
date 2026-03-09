@@ -114,6 +114,15 @@ The original player showed a drag-and-drop file selector on every page load. For
 
 ---
 
+## [1.3.0] — 2026-03-09
+
+### Changed
+- **`README.md`** — Setup section rewritten to reflect that all files (including the original repo assets) are now included in [EarthBoundX5/BandersnatchInteractive-Hosted](https://github.com/EarthBoundX5/BandersnatchInteractive-Hosted). Users no longer need to separately download files from the upstream repo. Setup steps simplified to: clone repo, add video file, point web server at folder.
+- **`README.md`** — Folder structure updated to remove `[from original repo]` annotations since all files are now included.
+- **`CHANGELOG.md`** — This entry added.
+
+---
+
 ## Upstream base
 
 This fork is based on the `master` branch of [mehotkhan/BandersnatchInteractive](https://github.com/mehotkhan/BandersnatchInteractive) as of early 2026, which itself incorporates contributions from [CyberShadow](https://github.com/CyberShadow) and is based on the original work by [joric](https://github.com/joric/bandersnatch).
