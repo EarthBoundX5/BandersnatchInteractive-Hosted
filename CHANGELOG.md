@@ -12,6 +12,8 @@ Initial release of the IIS Hosted Edition, modified by [EarthBoundX5](https://gi
 
 - **`web.config`** — IIS configuration file that registers the `.mkv` MIME type (`video/x-matroska`), adds MIME types for `.mp4`, `.webm`, `.vtt`, `.js`, and `.css`, sets `index.html` as the default document, and removes the default IIS request size limit to allow large byte-range video requests to be served correctly.
 
+- **`.htaccess`** — Apache equivalent of `web.config`. Registers the same MIME types, sets `index.html` as the default document, disables directory listing, and adds `Accept-Ranges`, `X-Content-Type-Options`, `X-Frame-Options`, and `X-Robots-Tag` response headers via `mod_headers`. Requires `mod_mime` and `mod_headers` to be enabled, and `AllowOverride All` in the Apache virtual host config.
+
 - **`robots.txt`** — Instructs all well-behaved web crawlers and search engines not to index the site. Includes explicit rules for Googlebot, Bingbot, DuckDuckBot, GPTBot, CCBot, and others.
 
 - **Embedded Click to Play button** (`index.html`) — A styled play button (dark circle with white triangle) embedded directly in the landing page. Replaces the need for any overlay and satisfies Chrome's user gesture requirement for `video.play()`.
