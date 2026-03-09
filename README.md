@@ -31,49 +31,41 @@ The original project required users to drag and drop a local copy of the video f
 ## Folder Structure
 
 ```
-BandersnatchInteractive/
+BandersnatchInteractive-Hosted/
 ├── index.html                  ← main page (modified)
 ├── web.config                  ← IIS MIME type and request size configuration
 ├── .htaccess                   ← Apache equivalent of web.config
 ├── robots.txt                  ← discourages search engine indexing
 ├── assets/
 │   ├── scripts.js              ← player logic (modified)
-│   ├── bandersnatch.js         ← Netflix segment/moment data  [from original repo]
-│   ├── SegmentMap.js           ← segment timing map           [from original repo]
-│   ├── styles.css              ← player styles                [from original repo]
+│   ├── bandersnatch.js         ← Netflix segment/moment data
+│   ├── SegmentMap.js           ← segment timing map
+│   ├── styles.css              ← player styles
 │   └── choices/
-│       ├── en.js               ← English choice text          [from original repo]
-│       ├── ru.js               ← Russian choice text          [from original repo]
-│       └── fr.js               ← French choice text           [from original repo]
-├── subtitle/                   ← VTT subtitle files           [from original repo]
+│       ├── en.js               ← English choice text
+│       ├── ru.js               ← Russian choice text
+│       └── fr.js               ← French choice text
+├── subtitle/                   ← VTT subtitle files
 │   └── *.vtt
 └── video/
-    └── bandersnatch.mkv        ← YOUR VIDEO FILE goes here
+    └── bandersnatch.mkv        ← YOUR VIDEO FILE goes here (not included)
 ```
-
-Files marked `[from original repo]` must be downloaded separately — they are not included here.
 
 ---
 
 ## Setup
 
-### 1. Get the original repo files
+### 1. Clone or download this repo
 
-Download the following from [mehotkhan/BandersnatchInteractive](https://github.com/mehotkhan/BandersnatchInteractive):
+```
+https://github.com/EarthBoundX5/BandersnatchInteractive-Hosted
+```
 
-- `assets/bandersnatch.js`
-- `assets/SegmentMap.js`
-- `assets/styles.css`
-- `assets/choices/en.js`
-- `assets/choices/ru.js`
-- `assets/choices/fr.js`
-- The entire `subtitle/` folder
-
-> **Do not** copy the original `index.html` or `assets/scripts.js` — use the modified versions from this repo instead.
+All modified and original files are included. The only thing not included is the video file itself.
 
 ### 2. Place your video file
 
-Create a `video/` subfolder and put your MKV inside it:
+Create a `video/` subfolder inside the repo folder and put your MKV inside it:
 
 ```
 video/bandersnatch.mkv
@@ -91,14 +83,14 @@ If your file has a different name, update the `data-src` attribute on the `<sour
 
 1. Open **IIS Manager**.
 2. Create a new site (or use an existing one).
-3. Set the **Physical Path** to your `BandersnatchInteractive/` folder.
+3. Set the **Physical Path** to your cloned repo folder.
 4. Assign a port (e.g. `8080` for local use, `80` for standard HTTP).
-5. Ensure `web.config` is in the site root — it registers the `.mkv` MIME type and removes the default request size cap so large byte-range video requests are served correctly.
+5. The included `web.config` handles `.mkv` MIME type registration and removes the default request size cap automatically — no manual IIS configuration needed beyond pointing it at the folder.
 6. In **Server Manager → Add Roles and Features → Web Server (IIS)**, confirm that **Static Content** is checked under `Web Server > Common HTTP Features`. Without this, IIS will not serve `.html`, `.js`, `.css`, or video files.
 
 **If using Apache:**
 
-1. Place `.htaccess` in the site root alongside `index.html`.
+1. The included `.htaccess` handles MIME types and headers automatically.
 2. Ensure `mod_mime` and `mod_headers` are enabled (`a2enmod mime headers` on Debian/Ubuntu).
 3. Ensure `AllowOverride All` (or at minimum `AllowOverride FileInfo Options`) is set for your site's directory in your Apache virtual host config or `httpd.conf`. Without this, Apache ignores `.htaccess` entirely.
 4. Restart Apache (`sudo systemctl restart apache2` or `sudo service httpd restart`).
