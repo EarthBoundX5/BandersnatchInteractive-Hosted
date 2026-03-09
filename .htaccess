@@ -1,0 +1,47 @@
+# .htaccess for Bandersnatch Interactive Player hosted on Apache
+# ===============================================================
+# Place this file in the ROOT of your site (same folder as index.html).
+#
+# What this does:
+#   1. Adds MIME types for MKV, MP4, WebM, VTT so Apache will serve them.
+#   2. Enables HTTP range requests (byte-range / seeking support in the browser).
+#   3. Sets index.html as the default document.
+#   4. Disables directory listing.
+#
+# Requirements:
+#   - mod_mime    (almost always enabled by default)
+#   - mod_headers (required for the Accept-Ranges and X-Content-Type-Options headers)
+#   - AllowOverride must be set to at least "All" or "FileInfo Options" in your
+#     Apache server config / virtual host for .htaccess to be respected.
+
+# ── Default document ────────────────────────────────────────────────────────
+DirectoryIndex index.html
+
+# ── Directory listing off ───────────────────────────────────────────────────
+Options -Indexes
+
+# ── MIME types ──────────────────────────────────────────────────────────────
+# Apache does not include MKV by default. The others are standard but are
+# listed explicitly to be safe across different distro/version defaults.
+AddType video/x-matroska        .mkv
+AddType video/mp4               .mp4
+AddType video/webm              .webm
+AddType text/vtt                .vtt
+AddType application/javascript  .js
+AddType text/css                .css
+
+# ── HTTP range requests (byte-range seeking) ────────────────────────────────
+# Apache supports byte-range requests natively for static files via mod_headers.
+# The header below makes it explicit, which helps in some reverse-proxy setups.
+<IfModule mod_headers.c>
+    Header set Accept-Ranges "bytes"
+
+    # Prevent MIME-sniffing
+    Header set X-Content-Type-Options "nosniff"
+
+    # Prevent the page being embedded in iframes on other sites
+    Header set X-Frame-Options "SAMEORIGIN"
+
+    # Tell crawlers not to index — belt-and-suspenders alongside robots.txt
+    Header set X-Robots-Tag "noindex, nofollow, noarchive"
+</IfModule>
