@@ -610,7 +610,40 @@ window.onload = function() {
 		file_selector.style.display = 'table';
 		document.getElementById("wrapper-video").style.display = 'none';
 	} else {
-		startPlayback();
+		// Chrome requires a user gesture before play() is allowed.
+		// Show a full-screen overlay; clicking it counts as interaction.
+		var overlay = document.createElement('div');
+		overlay.id = 'play-overlay';
+		overlay.style.cssText = [
+			'position:fixed',
+			'top:0','left:0',
+			'width:100%','height:100%',
+			'background:#000',
+			'display:flex',
+			'align-items:center',
+			'justify-content:center',
+			'z-index:9999',
+			'cursor:pointer'
+		].join(';');
+		overlay.innerHTML = [
+			'<div style="text-align:center;color:#fff;font-family:sans-serif;">',
+			'<div style="width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,0.15);',
+			'border:3px solid #fff;display:flex;align-items:center;justify-content:center;',
+			'margin:0 auto 24px;">',
+			'<div style="width:0;height:0;border-top:22px solid transparent;',
+			'border-bottom:22px solid transparent;border-left:38px solid #fff;',
+			'margin-left:8px;"></div></div>',
+			'<div style="font-size:1.5rem;font-weight:bold;letter-spacing:0.05em;">',
+			'Click to Play</div>',
+			'<div style="font-size:0.9rem;margin-top:10px;opacity:0.6;">',
+			'Bandersnatch Interactive Player</div>',
+			'</div>'
+		].join('');
+		document.body.appendChild(overlay);
+		overlay.addEventListener('click', function () {
+			overlay.parentNode.removeChild(overlay);
+			startPlayback();
+		}, { once: true });
 	}
 	document.getElementById('fileinput').addEventListener('change', function () {
 		var file = this.files[0];
