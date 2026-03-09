@@ -605,7 +605,7 @@ window.onload = function() {
 			playSegment(null);
 		video_selector.play();
 	}
-	if (video_source_selector.getAttribute("src") == '') {
+	if (!video_source_selector.getAttribute("data-src")) {
 		console.log('no video');
 		file_selector.style.display = 'table';
 		document.getElementById("wrapper-video").style.display = 'none';
@@ -615,34 +615,57 @@ window.onload = function() {
 		// requirement and shows a buffering status message in #hosted-status.
 		window.hostedPlay = function () {
 			var btn = document.getElementById('hosted-play-btn');
-			var status = document.getElementById('hosted-status');
 
-			// Inject spinner style once
+			// Hide the play button
+			if (btn) btn.style.display = 'none';
+
+			// Inject spinner + overlay styles once
 			if (!document.getElementById('bnd-spinner-style')) {
 				var s = document.createElement('style');
 				s.id = 'bnd-spinner-style';
-				s.textContent = '@keyframes bnd-spin{to{transform:rotate(360deg)}}' +
-					'#bnd-spinner{display:inline-block;width:18px;height:18px;border-radius:50%;' +
-					'border:3px solid #ccc;border-top-color:#333;' +
-					'animation:bnd-spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;}';
+				s.textContent =
+					'@keyframes bnd-spin{to{transform:rotate(360deg)}}' +
+					'#bnd-overlay{position:fixed;top:0;left:0;width:100%;height:100%;' +
+					'background:rgba(0,0,0,0.85);display:flex;align-items:center;' +
+					'justify-content:center;z-index:9999;transition:opacity 0.5s;}' +
+					'#bnd-overlay-inner{text-align:center;color:#fff;font-family:sans-serif;}' +
+					'#bnd-spinner{width:64px;height:64px;border-radius:50%;' +
+					'border:5px solid rgba(255,255,255,0.2);border-top-color:#fff;' +
+					'animation:bnd-spin 0.9s linear infinite;margin:0 auto 20px;}';
 				document.head.appendChild(s);
 			}
 
-			if (btn) btn.style.display = 'none';
-			if (status) {
-				status.style.display = 'block';
-				status.innerHTML = '<span id="bnd-spinner"></span>' +
-					'Buffering&hellip; Loading video from server. ' +
-					'It may take some time to buffer depending on your connection.';
-			}
+			// Show full-screen buffering overlay
+			var overlay = document.createElement('div');
+			overlay.id = 'bnd-overlay';
+			overlay.innerHTML =
+				'<div id="bnd-overlay-inner">' +
+				'<div id="bnd-spinner"></div>' +
+				'<div style="font-size:1.5rem;font-weight:bold;margin-bottom:10px;">Buffering&hellip;</div>' +
+				'<div style="font-size:0.95rem;opacity:0.7;max-width:360px;line-height:1.5;">' +
+				'Loading video from server.<br>It may take some time depending on your connection.</div>' +
+				'</div>';
+			document.body.appendChild(overlay);
 
-			// Hide the menu and show the video once buffered
+			// Set video src NOW — no network request happens until this point
+			video_selector.src = video_source_selector.getAttribute('data-src');
+			video_selector.load();
+
+			// Re-enable pointer events on the video wrapper
+			var wv = document.getElementById('wrapper-video');
+			if (wv) wv.style.pointerEvents = 'auto';
+
+			// Fade out overlay once video is ready to play
 			var played = false;
 			function onCanPlay() {
 				if (played) return;
 				played = true;
 				video_selector.removeEventListener('canplay', onCanPlay);
 				video_selector.removeEventListener('playing', onCanPlay);
+				overlay.style.opacity = '0';
+				setTimeout(function() {
+					if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+				}, 500);
 			}
 			video_selector.addEventListener('canplay', onCanPlay);
 			video_selector.addEventListener('playing', onCanPlay);
