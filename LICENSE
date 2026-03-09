@@ -19,3 +19,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+The modifications made in this fork (IIS hosted play support) are contributed
+by EarthBoundX5 (https://github.com/EarthBoundX5) and are released under the
+same MIT License terms above.
+
+The original scripts.js and index.html from the upstream repository carry the
+Unlicense (public domain dedication). The MIT License above governs this
+repository as a whole, which is consistent with and more permissive than no
+license restriction.
