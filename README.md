@@ -34,6 +34,7 @@ The original project required users to drag and drop a local copy of the video f
 BandersnatchInteractive/
 ├── index.html                  ← main page (modified)
 ├── web.config                  ← IIS MIME type and request size configuration
+├── .htaccess                   ← Apache equivalent of web.config
 ├── robots.txt                  ← discourages search engine indexing
 ├── assets/
 │   ├── scripts.js              ← player logic (modified)
@@ -84,19 +85,25 @@ If your file has a different name, update the `data-src` attribute on the `<sour
 <source id="video-source" data-src="video/your-filename-here.mkv">
 ```
 
-### 3. Configure IIS
+### 3. Configure your web server
+
+**If using IIS:**
 
 1. Open **IIS Manager**.
 2. Create a new site (or use an existing one).
 3. Set the **Physical Path** to your `BandersnatchInteractive/` folder.
 4. Assign a port (e.g. `8080` for local use, `80` for standard HTTP).
-5. Ensure the `web.config` file is in the site root — it registers the `.mkv` MIME type and removes the default request size cap so large byte-range video requests are served correctly.
+5. Ensure `web.config` is in the site root — it registers the `.mkv` MIME type and removes the default request size cap so large byte-range video requests are served correctly.
+6. In **Server Manager → Add Roles and Features → Web Server (IIS)**, confirm that **Static Content** is checked under `Web Server > Common HTTP Features`. Without this, IIS will not serve `.html`, `.js`, `.css`, or video files.
 
-### 4. Verify IIS Static Content is enabled
+**If using Apache:**
 
-In **Server Manager → Add Roles and Features → Web Server (IIS)**, confirm that **Static Content** is checked under `Web Server > Common HTTP Features`. Without this, IIS will not serve `.html`, `.js`, `.css`, or video files.
+1. Place `.htaccess` in the site root alongside `index.html`.
+2. Ensure `mod_mime` and `mod_headers` are enabled (`a2enmod mime headers` on Debian/Ubuntu).
+3. Ensure `AllowOverride All` (or at minimum `AllowOverride FileInfo Options`) is set for your site's directory in your Apache virtual host config or `httpd.conf`. Without this, Apache ignores `.htaccess` entirely.
+4. Restart Apache (`sudo systemctl restart apache2` or `sudo service httpd restart`).
 
-### 5. Open in Chrome
+### 4. Open in Chrome
 
 Navigate to your site in Google Chrome:
 
