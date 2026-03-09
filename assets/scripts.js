@@ -610,103 +610,37 @@ window.onload = function() {
 		file_selector.style.display = 'table';
 		document.getElementById("wrapper-video").style.display = 'none';
 	} else {
-		// ── Play overlay (sits on top of the menu screen) ─────────────────
-		// Chrome requires a user gesture before play() is allowed.
-		// We show an overlay ON TOP of the existing menu so the user can
-		// still read the instructions behind it. After clicking, the overlay
-		// transitions to a buffering spinner that disappears once the video
-		// has enough data to play.
-		var overlay = document.createElement('div');
-		overlay.id = 'play-overlay';
-		overlay.style.cssText = [
-			'position:fixed',
-			'top:0', 'left:0',
-			'width:100%', 'height:100%',
-			'background:rgba(0,0,0,0.82)',
-			'display:flex',
-			'align-items:center',
-			'justify-content:center',
-			'z-index:9999',
-			'cursor:pointer',
-			'transition:opacity 0.5s'
-		].join(';');
+		// The play button is embedded in the menu (index.html #hosted-play-btn).
+		// hostedPlay() is called by its onclick; it satisfies Chrome's user-gesture
+		// requirement and shows a buffering status message in #hosted-status.
+		window.hostedPlay = function () {
+			var btn = document.getElementById('hosted-play-btn');
+			var status = document.getElementById('hosted-status');
 
-		// Spinner keyframes injected once
-		if (!document.getElementById('play-overlay-style')) {
-			var styleEl = document.createElement('style');
-			styleEl.id = 'play-overlay-style';
-			styleEl.textContent = [
-				'@keyframes bnd-spin {',
-				'  to { transform: rotate(360deg); }',
-				'}',
-				'#play-overlay-inner { text-align:center; color:#fff; font-family:sans-serif; }',
-				'#play-overlay-btn {',
-				'  width:100px; height:100px; border-radius:50%;',
-				'  background:rgba(255,255,255,0.12); border:3px solid #fff;',
-				'  display:flex; align-items:center; justify-content:center;',
-				'  margin:0 auto 20px; transition:background 0.2s;',
-				'}',
-				'#play-overlay-btn:hover { background:rgba(255,255,255,0.25); }',
-				'#play-overlay-btn .triangle {',
-				'  width:0; height:0;',
-				'  border-top:24px solid transparent;',
-				'  border-bottom:24px solid transparent;',
-				'  border-left:42px solid #fff;',
-				'  margin-left:10px;',
-				'}',
-				'#play-overlay-spinner {',
-				'  width:64px; height:64px; border-radius:50%;',
-				'  border:5px solid rgba(255,255,255,0.2);',
-				'  border-top-color:#fff;',
-				'  animation:bnd-spin 0.9s linear infinite;',
-				'  margin:0 auto 20px;',
-				'  display:none;',
-				'}'
-			].join('\n');
-			document.head.appendChild(styleEl);
-		}
-
-		overlay.innerHTML = [
-			'<div id="play-overlay-inner">',
-			'  <div id="play-overlay-btn"><div class="triangle"></div></div>',
-			'  <div id="play-overlay-spinner"></div>',
-			'  <div id="play-overlay-title" style="font-size:1.6rem;font-weight:bold;',
-			'       letter-spacing:0.05em;margin-bottom:10px;">',
-			'    Bandersnatch Interactive Player</div>',
-			'  <div id="play-overlay-sub" style="font-size:0.95rem;opacity:0.75;max-width:400px;',
-			'       line-height:1.5;padding:0 20px;">',
-			'    Your video is already loaded on the server &mdash; no need to drag and drop anything.',
-			'    Click Play to begin. It may take up to 30 seconds to buffer before playback starts.',
-			'  </div>',
-			'</div>'
-		].join('\n');
-
-		document.body.appendChild(overlay);
-
-		overlay.addEventListener('click', function () {
-			// Switch to buffering state
-			var btn = document.getElementById('play-overlay-btn');
-			var spinner = document.getElementById('play-overlay-spinner');
-			var title = document.getElementById('play-overlay-title');
-			var sub = document.getElementById('play-overlay-sub');
-			if (btn) btn.style.display = 'none';
-			if (spinner) spinner.style.display = 'block';
-			if (title) title.textContent = 'Buffering\u2026';
-			if (sub) sub.textContent = 'Loading video from server. Playback will start shortly.';
-			overlay.style.cursor = 'default';
-
-			// Remove overlay once video can play
-			function removeOverlay() {
-				overlay.style.opacity = '0';
-				setTimeout(function () {
-					if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-				}, 500);
+			// Inject spinner style once
+			if (!document.getElementById('bnd-spinner-style')) {
+				var s = document.createElement('style');
+				s.id = 'bnd-spinner-style';
+				s.textContent = '@keyframes bnd-spin{to{transform:rotate(360deg)}}' +
+					'#bnd-spinner{display:inline-block;width:18px;height:18px;border-radius:50%;' +
+					'border:3px solid #ccc;border-top-color:#333;' +
+					'animation:bnd-spin 0.8s linear infinite;vertical-align:middle;margin-right:8px;}';
+				document.head.appendChild(s);
 			}
+
+			if (btn) btn.style.display = 'none';
+			if (status) {
+				status.style.display = 'block';
+				status.innerHTML = '<span id="bnd-spinner"></span>' +
+					'Buffering&hellip; Loading video from server. ' +
+					'It may take some time to buffer depending on your connection.';
+			}
+
+			// Hide the menu and show the video once buffered
 			var played = false;
 			function onCanPlay() {
 				if (played) return;
 				played = true;
-				removeOverlay();
 				video_selector.removeEventListener('canplay', onCanPlay);
 				video_selector.removeEventListener('playing', onCanPlay);
 			}
@@ -714,7 +648,7 @@ window.onload = function() {
 			video_selector.addEventListener('playing', onCanPlay);
 
 			startPlayback();
-		}, { once: true });
+		};
 	}
 	document.getElementById('fileinput').addEventListener('change', function () {
 		var file = this.files[0];
