@@ -1,16 +1,29 @@
 /*
  * This is free and unencumbered software released into the public domain.
- * [license header unchanged - see original]
+ *
+ * Anyone is free to copy, modify, publish, use, compile, sell, or
+ * distribute this software, either in source code form or as a compiled
+ * binary, for any purpose, commercial or non-commercial, and by any
+ * means.
+ *
+ * In jurisdictions that recognize copyright laws, the author or authors
+ * of this software dedicate any and all copyright interest in the
+ * software to the public domain. We make this dedication for the benefit
+ * of the public at large and to the detriment of our heirs and
+ * successors. We intend this dedication to be an overt act of
+ * relinquishment in perpetuity of all present and future rights to this
+ * software under copyright law.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+ * OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * For more information, please refer to <http://unlicense.org>
  */
-
-// ============================================================
-// HOSTED VIDEO CONFIGURATION
-// Set the path to your video file below.
-// Examples:
-//   var HOSTED_VIDEO = 'video/bandersnatch.mkv';
-//   var HOSTED_VIDEO = 'video/Black_Mirror_Bandersnatch.mp4';
-// ============================================================
-var HOSTED_VIDEO = 'video/bandersnatch.mkv';
 
 // Data
 var segmentMap = SegmentMap;
@@ -578,12 +591,10 @@ function togglePlayPause() {
 	if (v.paused) v.play();
 	else v.pause();
 }
-
 window.onload = function() {
 	var video_selector = document.getElementById("video");
 	var video_source_selector = document.getElementById("video-source");
 	var file_selector = document.getElementById("file-selector");
-
 	function startPlayback() {
 		file_selector.style.display = 'none';
 		if (window.location.hash)
@@ -594,24 +605,13 @@ window.onload = function() {
 			playSegment(null);
 		video_selector.play();
 	}
-
-	// ============================================================
-	// AUTO-LOAD HOSTED VIDEO
-	// Sets the video src from HOSTED_VIDEO and starts playback
-	// immediately, skipping the drag-and-drop screen entirely.
-	// ============================================================
-	if (HOSTED_VIDEO && HOSTED_VIDEO !== '') {
-		video_selector.src = HOSTED_VIDEO;
-		document.getElementById("wrapper-video").style.display = 'block';
-		startPlayback();
-	} else if (video_source_selector.getAttribute("src") == '') {
+	if (video_source_selector.getAttribute("src") == '') {
 		console.log('no video');
 		file_selector.style.display = 'table';
 		document.getElementById("wrapper-video").style.display = 'none';
 	} else {
 		startPlayback();
 	}
-
 	document.getElementById('fileinput').addEventListener('change', function () {
 		var file = this.files[0];
 		var fileUrl = URL.createObjectURL(file);
