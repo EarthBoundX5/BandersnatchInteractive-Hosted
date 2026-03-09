@@ -1,195 +1,89 @@
 <!DOCTYPE html>
-
-<!--
-	This is free and unencumbered software released into the public domain.
-
-	Anyone is free to copy, modify, publish, use, compile, sell, or
-	distribute this software, either in source code form or as a compiled
-	binary, for any purpose, commercial or non-commercial, and by any
-	means.
-
-	In jurisdictions that recognize copyright laws, the author or authors
-	of this software dedicate any and all copyright interest in the
-	software to the public domain. We make this dedication for the benefit
-	of the public at large and to the detriment of our heirs and
-	successors. We intend this dedication to be an overt act of
-	relinquishment in perpetuity of all present and future rights to this
-	software under copyright law.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-	EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-	IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-	OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-	ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-	OTHER DEALINGS IN THE SOFTWARE.
-
-	For more information, please refer to <http://unlicense.org>
--->
-
 <html lang="en">
-
 <head>
-	<meta charset="utf-8">
-
-	<title>Bandersnatch Interactive Player</title>
-	<meta name="description"
-		content="Stand-alone open-source interactive HTML player for Black Mirror - Bandersnatch" />
-	<meta name="keywords" content="Bandersnatch,Bandersnatch Interactive Player,Interactive Player,watch," />
-	<script src="assets/bandersnatch.js"></script>
-	<script src="assets/choices/ru.js"></script>
-	<script src="assets/choices/en.js"></script>
-	<script src="assets/choices/fr.js"></script>
-	<script src="assets/SegmentMap.js"></script>
-	<script src="assets/scripts.js"></script>
-	<script>
-		// keep localizable strings out of scripts.js
-		function askReset() {
-			if (confirm('Are you sure you want to reset all choices, breadcrumbs, and watched scenes?'))
-				reset();
-		}
-	</script>
-
-	<link rel="stylesheet" type="text/css" href="assets/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bandersnatch Interactive Player</title>
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
-
 <body>
-	<div>
-		<div id="c">
-			<section role="banner">
-				<div id="file-selector">
-					<div class="file-area">
-						<div class="contact">
-							<div>
-								<span class="default">You can select translation of choices: </span>
-								<select id="choice-translation">
-									<option value="ru">Russian</option>
-									<option value="en" selected>English</option>
-									<option value="fr">French</option>
-								</select>
-								<br>
-								This player remembers your choices and watch history: <a
-								href="javascript:askReset()">Reset all</a>
-							</div>
-							<p>
-								Authors:
-								<a href="https://github.com/joric/bandersnatch/">Original version</a> - <a
-									href="https://github.com/joric/">joric</a> |
-								Web page, subtitles - <a href="https://github.com/mehotkhan">Mehotkhan</a> |
-								Many fixes, improvements, and everything else - <a
-									href="https://github.com/CyberShadow">CyberShadow</a>						
-							</p>
-						</div>
-						<input id="fileinput" type="file">
-						<div class="file-dummy">
-							<h2>Bandersnatch Interactive Player</h2>
-							<span class="default">Select Bandersnatch video file ( 5:12:14 ) </span>
-							<span class="success">Great, your file is selected</span>
-							<ul class="file-tips">
-								<li>This player is known to work only on Google Chrome or Chromium.</li>
-								<li>Obtain the Bandersnatch video file (duration should be 5:12:14).<br>
-									Tested with <code>Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.mkv</code>,<br>
-									<code>Black.Mirror.Bandersnatch.2018.MULTi.1080p.NF.WEB-DL.x264-NSP.mkv</code>,<br>
-									<code>Black.Mirror.Bandersnatch.2018.MULTi.720p.NF.WEB-DL.x264-NSP.mkv</code>.
-									
-								</li>
-								<li>Drag it on top of this box (or click here to select it).</li>
-								<li>Subtitles in many languages are available. If you the french audio you can chose French Forced Subtitle</li>
-								<li>To change the subtitle:
-									<ol>
-										<li>Right click on the video</li>
-										<li>Enable "Show controls"</li>
-										<li>Click on the <span class="menu-item"></span> in the bottom-right</li>
-										<li>Select the desired subtitle</li>
-										<li>You can now hide the player controls in the same way as step 1-2.</li>
-									</ol>
-								</li>
-								<li>Note: do not use the "full screen" button in the video player if you enable "Show
-									controls".
-									Choice selection interface will not be visible if you do this.</li>
-							</ul>
 
-							<ul class="controls-tips">
-								<h6>Keyboard controls</h6>
-								<li><kbd>F</kbd> - Toggle fullscreen</li>
-								<li><kbd>R</kbd> - Restart video</li>
-								<li><kbd>→</kbd> / <kbd>←</kbd> - Jump to the next / previous segment (or interaction
-									zone)</li>
-								<li><kbd>↑</kbd> / <kbd>↓</kbd> - Speed up / slow down playback</li>
-								<li><kbd>Space</kbd> - Toggle play and pause</li>
-							</ul>
-						</div>
-					</div>
+<div id="wrapper-file" class="file-selector" style="display:none;">
+    <div class="header">
+        <p>
+            Authors:
+            <a href="https://github.com/joric/bandersnatch/">Original version</a> - <a href="https://github.com/joric/">joric</a> |
+            Web page, subtitles - <a href="https://github.com/mehotkhan">Mehotkhan</a> |
+            Many fixes, improvements, and everything else - <a href="https://github.com/CyberShadow">CyberShadow</a>
+        </p>
+        <p>This player remembers your choices and watch history: <a href="javascript:askReset()">Reset all</a></p>
+    </div>
+    <input id="fileinput" type="file">
+    <div class="file-dummy">
+        <h2>Bandersnatch Interactive Player</h2>
+        <span class="default">Select Bandersnatch video file ( 5:12:14 ) </span>
+        <span class="success">Great, your file is selected</span>
+        <ul class="file-tips">
+            <li>This player is known to work only on Google Chrome or Chromium.</li>
+            <li>Obtain the Bandersnatch video file (duration should be 5:12:14).</li>
+            <li>Drag it on top of this box (or click here to select it).</li>
+        </ul>
+        <h6>Keyboard controls</h6>
+        <ul>
+            <li><code>F</code> - Toggle fullscreen</li>
+            <li><code>R</code> - Restart video</li>
+            <li><code>→</code> / <code>←</code> - Jump to the next / previous segment</li>
+            <li><code>Space</code> - Toggle play and pause</li>
+        </ul>
+    </div>
+</div>
 
-				</div>
-				<div id="wrapper-video">
-					<video id="video" preload="metadata">
-						<source id="video-source" src="">
-						<track label="English" kind="subtitles" srclang="en"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.WEBRip.x264-NoGRP.vtt" default>
-						<track label="Chinese" kind="subtitles" srclang="en"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.2160p.4K.WEB.x265.10bit.AAC5.1.chs.vtt" default>
-						<track label="Chs+Eng" kind="subtitles" srclang="en"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.2160p.4K.WEB.x265.10bit.AAC5.1.chs+eng.vtt" default>
-						<track label="Persian" kind="subtitles" srclang="en"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.WEBRip.x264-NoGRP-persian-vtt-sharp.vtt">
-						<track label="Arabic" kind="subtitles" srclang="en"
-							src="subtitle/Black.Mirror.Bandersnatch.2018-arabic.vtt">
-						<track label="Spanish" kind="subtitles" srclang="en"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.720p.espanish.vtt">
-						<track label="Hebrew" kind="subtitles" srclang="en"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.Web-05.12.14-NF-UniHebSubs-hebrew.vtt">
-						<track label="Portuguese" kind="subtitles" srclang="en"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.WEBRip.720p.portuguese.vtt">
-						<track label="Greek" kind="subtitles" srclang="en"
-							src="subtitle/black-mirror-bandersnatch-2018-nf-web-dl-720p-greek.vtt">
-						<track label="Turkish" kind="subtitles" srclang="en"
-							src="subtitle/BlackMirror.Bandersnatch-Turkish.vtt">
-						<track label="Polish" kind="subtitles" srclang="en"
-							src="subtitle/Czarne.lustro_.Bandersnatch.WEBRip.Netflix.pl.vtt">
-						<track label="Indonesian" kind="subtitles" srclang="en"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.WEBRip.x264-NoGRP-Indonesian-vtt-sharp.vtt">
-						<track label="Russian" kind="subtitles" srclang="ru"
-							src="subtitle/BlackMirror.Bandersnatch-russian.vtt">
-						<track label="French" kind="subtitles" srclang="fr"
-							src="subtitle/Black.Mirror_.Bandersnatch.French.WEBRip.Netflix.vtt">
-						<track label="French Forced" kind="subtitles" srclang="de"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.MULTi.1080p.NF.WEB-DL.x264-NSP_track9_[fre].vtt">
+<div id="wrapper-video" style="display:none;">
+    <div id="loading-overlay" style="display:none;">
+        <div id="loading-message">Loading video...</div>
+    </div>
+    <video id="v" preload="auto">
+        <!-- ============================================================
+             SUBTITLE TRACKS — keep or remove as needed
+             ============================================================ -->
+        <track label="English" kind="subtitles" srclang="en"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.en.vtt">
+        <track label="Russian" kind="subtitles" srclang="ru"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.ru.vtt">
+        <track label="French" kind="subtitles" srclang="fr"
+            src="subtitle/Black.Mirror_.Bandersnatch.French.WEBRip.Netflix.vtt">
+        <track label="Spanish" kind="subtitles" srclang="es"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.es.vtt">
+        <track label="Arabic" kind="subtitles" srclang="ar"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.ar.vtt">
+        <track label="Hebrew" kind="subtitles" srclang="he"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.he.vtt">
+        <track label="Portuguese" kind="subtitles" srclang="pt"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.pt.vtt">
+        <track label="Turkish" kind="subtitles" srclang="tr"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.tr.vtt">
+        <track label="Polish" kind="subtitles" srclang="pl"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.pl.vtt">
+        <track label="Indonesian" kind="subtitles" srclang="id"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.id.vtt">
+        <track label="Greek" kind="subtitles" srclang="el"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.el.vtt">
+        <track label="Persian" kind="subtitles" srclang="fa"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEB-DL.x264.DUAL.fa.vtt">
+        <track label="Hungarian" kind="subtitles" srclang="hu"
+            src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEBRip.XviD.AC3-FGT-Hungarian.vtt">
+        <track label="Korean" kind="subtitles" srclang="ko"
+            src="subtitle/Black.Mirror.Bandersnatch.Korean.vtt">
+        <track label="German" kind="subtitles" srclang="de"
+            src="subtitle/Black.Mirror.Bandersnatch.German.vtt">
+        <track label="Chinese" kind="subtitles" srclang="zh"
+            src="subtitle/Black.Mirror.Bandersnatch.Chinese.vtt">
+    </video>
+    <canvas id="c"></canvas>
+</div>
 
-						<track label="Hungarian" kind="subtitles" srclang="hu"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.720p.WEBRip.XviD.AC3-FGT-Hungarian.vtt">
+<script src="assets/bandersnatch.js"></script>
+<script src="assets/scripts.js"></script>
 
-						<track label="Korean" kind="subtitles" srclang="kr"
-							src="subtitle/[SubtitleTools.com] Black.Mirror.Bandersnatch.2018.REPACK.1080p.WEB.X264-DEFLATE.Korean.vtt">
-						<track label="German" kind="subtitles" srclang="de"
-							src="subtitle/Black.Mirror.Bandersnatch.2018.WEBRip.Netflix.German.vtt">
-					</video>
-					<div class="controls">
-						<div id="choiceCaption"></div>
-						<div id="progress"></div>
-						<div class="buttons">
-							<ul id="choices"></ul>
-							<ul id="interactionZones"></ul>
-							<ul id="nextSegments"></ul>
-							<ul id="nextSegment"></ul>
-						</div>
-					</div>
-				</div>
-
-		</div>
-		</section>
-
-
-	</div>
 </body>
-
-<script>
-	var select = document.getElementById('choice-translation');
-	select.addEventListener('change',(e)=>{
-	translated_choices = window[select.value];
-	console.log(select.value);
-	momentsBySegment = switch_choices();
-	})
-</script>
-
 </html>
