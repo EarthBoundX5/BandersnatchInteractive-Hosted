@@ -78,10 +78,6 @@
 						<div class="file-dummy">
 							<h2>Bandersnatch Interactive Player</h2>
 
-							<ul class="file-tips">
-								<li>This player is known to work only on Google Chrome or Chromium.</li>
-							</ul>
-
 							<!-- Embedded play / buffering UI — styled to match the original overlay -->
 							<div id="hosted-play-area" style="margin:22px 0;text-align:center;font-family:sans-serif;">
 								<div id="hosted-play-btn" onclick="hostedPlay();" style="cursor:pointer;display:inline-block;color:#fff;">
@@ -98,10 +94,10 @@
 										            margin-left:10px;"></div>
 									</div>
 									<div style="font-size:1.6rem;font-weight:bold;letter-spacing:0.05em;
-									            color:#fff;text-shadow:0 0 8px #000;margin-bottom:8px;">
+									            color:#000;margin-bottom:8px;">
 										Bandersnatch Interactive Player</div>
 									<div style="font-size:0.95rem;opacity:0.75;max-width:400px;line-height:1.5;
-									            color:#fff;text-shadow:0 0 6px #000;">
+									            color:#000;">
 										Your video is already on the server &mdash; no need to drag and drop anything.<br>
 										It may take some time to buffer depending on your connection.
 									</div>
@@ -111,6 +107,7 @@
 							</div>
 
 							<ul class="file-tips">
+								<li>This player is known to work only on Google Chrome or Chromium.</li>
 								<li>Note: do not use the &ldquo;full screen&rdquo; button in the video player if you enable &ldquo;Show controls&rdquo;. Choice selection interface will not be visible if you do this.</li>
 							</ul>
 
@@ -126,9 +123,9 @@
 					</div>
 
 				</div>
-				<div id="wrapper-video">
+				<div id="wrapper-video" style="pointer-events:none;">
 					<video id="video" preload="metadata">
-						<source id="video-source" src="video/bandersnatch.mkv">
+						<source id="video-source" data-src="video/bandersnatch.mkv">
 						<track label="English" kind="subtitles" srclang="en"
 							src="subtitle/Black.Mirror.Bandersnatch.2018.WEBRip.x264-NoGRP.vtt" default>
 						<track label="Persian" kind="subtitles" srclang="en"
